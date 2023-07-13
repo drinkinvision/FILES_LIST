@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Выбор директории и сохранение списка файлов</title>
+</head>
+<body>
+  <input type="file" id="directory-input" webkitdirectory multiple>
+  <button id="save-button">Сохранить список файлов</button>
+
+  <script>
+
+const directoryInput = document.getElementById('directory-input');
+const saveButton = document.getElementById('save-button');
+
+saveButton.addEventListener('click', function() {
+  const files = directoryInput.files;
+
+  if (files.length > 0) {
+    const folderSet = new Set();
+
+    for (let i = 0; i < files.length; i++) {
+      const path = files[i].webkitRelativePath;
+      const folders = path.split('/'); // Получить все папки в пути
+
+      if (folders.length >= 2) {
+        const firstLevelFolder = folders[0]; // Первая папка
+        const secondLevelFolder = folders[1]; // Вторая папка
+
+        folderSet.add(firstLevelFolder);
+        folderSet.add(`${firstLevelFolder}/${secondLevelFolder}`);
+      }
+    }
+
+    const folderList = Array.from(folderSet);
+    const text = folderList.join('\n');
+    const blob = new Blob([text], { type: 'text/plain' });
+
+    const link = document.createElement('a');
+    link.href = URL.createObjectURL(blob);
+    link.download = 'folder_list.txt';
+    link.click();
+  }
+});
+
+  </script>
+</body>
+</html>
