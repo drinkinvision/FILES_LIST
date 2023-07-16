@@ -18,6 +18,10 @@
       margin-bottom: 20px;
     }
 
+    .input-container label {
+      margin-right: 10px;
+    }
+
     #save-button {
       padding: 10px 20px;
       font-size: 16px;
@@ -37,7 +41,13 @@
   <h1>Выбор директории и сохранение списка файлов</h1>
 
   <div class="input-container">
+    <label for="directory-input">Выберите директорию:</label>
     <input type="file" id="directory-input" webkitdirectory multiple>
+  </div>
+
+  <div class="input-container">
+    <label for="file-name-input">Введите имя файла:</label>
+    <input type="text" id="file-name-input" placeholder="folder_list.txt">
   </div>
 
   <div class="input-container">
@@ -46,10 +56,12 @@
 
   <script>
     const directoryInput = document.getElementById('directory-input');
+    const fileNameInput = document.getElementById('file-name-input');
     const saveButton = document.getElementById('save-button');
 
     saveButton.addEventListener('click', function() {
       const files = directoryInput.files;
+      const fileName = fileNameInput.value || 'folder_list.txt'; // Если пользователь не ввел имя файла, используем имя по умолчанию
 
       if (files.length > 0) {
         const folderSet = new Set();
@@ -73,7 +85,7 @@
 
         const link = document.createElement('a');
         link.href = URL.createObjectURL(blob);
-        link.download = 'folder_list.txt';
+        link.download = fileName;
         link.click();
       }
     });
